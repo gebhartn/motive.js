@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { User } from '../models/user'
-import { Auth } from '../models/auth'
+import { User } from '../controllers/user'
+import { Auth } from '../controllers/auth'
 
 const router = Router()
 
