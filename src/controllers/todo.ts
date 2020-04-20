@@ -14,4 +14,14 @@ export const Todo = {
 
     res.status(200).json(todo)
   },
+
+  find: async (_req: Request, res: Response) => {
+    const { id } = res.locals.payload
+    const { todos } = await prisma.user.findOne({
+      where: { id: Number(id) },
+      include: { todos: true },
+    })
+
+    res.status(200).json({ todos })
+  },
 }
