@@ -48,4 +48,14 @@ export const Todo = {
 
     res.status(200).json(result)
   },
+
+  //! Delete a todo by id
+  deleteBy: async (req: Request, res: Response) => {
+    const { id } = req.params
+    const todo = await prisma.todo.delete({
+      where: { id: Number(id) },
+    })
+
+    res.status(202).json(todo)
+  },
 }
