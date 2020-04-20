@@ -4,6 +4,10 @@ import { Request, Response } from 'express'
 const prisma = new PrismaClient()
 
 export const Todo = {
+  //! Create a new Todo:
+  //!   Body:
+  //!    category: String (required): Ex. work, personal
+  //!    content: String (required): Ex. update documentation
   create: async (req: Request, res: Response) => {
     const { id } = res.locals.payload
     const { category, content } = req.body
@@ -15,7 +19,8 @@ export const Todo = {
     res.status(200).json(todo)
   },
 
-  find: async (_req: Request, res: Response) => {
+  //! Find all todos for a user by id
+  findAll: async (_req: Request, res: Response) => {
     const { id } = res.locals.payload
     const { todos } = await prisma.user.findOne({
       where: { id: Number(id) },
@@ -23,5 +28,24 @@ export const Todo = {
     })
 
     res.status(200).json({ todos })
+  },
+
+  //! Find a todo by query string
+  //! Usage:
+  //!    /filter?search={search-string}
+  filterBy: async (req: Request, res: Response) => {
+    const { search }: { search?: string } = req.query
+    const { id } = res.locals.payload
+    const result = await prisma.todo.findMany({
+      where: {
+        author: { id: Number(id) },
+        OR: [
+          { category: { contains: search } },
+          { content: { contains: search } },
+        ],
+      },
+    })
+
+    res.status(200).json(result)
   },
 }
