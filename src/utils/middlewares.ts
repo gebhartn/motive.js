@@ -3,11 +3,11 @@ import * as jwt from 'jsonwebtoken'
 import config from './config'
 
 export default (req: Request, res: Response, next: NextFunction) => {
-  const token = <string>req.headers.authorization
-  let payload
+  const token: string = req.headers.authorization
+  let payload: any
 
   try {
-    payload = <any>jwt.verify(token, config.secret)
+    payload = jwt.verify(token, config.secret)
     res.locals.payload = payload
   } catch (err) {
     res.status(401).send()
