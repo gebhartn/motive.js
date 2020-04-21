@@ -56,7 +56,6 @@
  Return:
  - status: 200
  - todo: Todo[] | []
-}
 ```
 
 ### [Protected Route] POST /todo
