@@ -1,9 +1,9 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Todo } from '@prisma/client'
 import { Request, Response } from 'express'
 
 const prisma = new PrismaClient()
 
-export const Todo = {
+export const TodoController = {
   //! Create a new Todo:
   //!   Body:
   //!    category: String (required): Ex. work, personal
@@ -12,7 +12,7 @@ export const Todo = {
     const { id } = res.locals.payload
     const { category, content } = req.body
 
-    const todo = await prisma.todo.create({
+    const todo: Todo = await prisma.todo.create({
       data: { content, category, author: { connect: { id } } },
     })
 
@@ -36,7 +36,7 @@ export const Todo = {
   filterBy: async (req: Request, res: Response) => {
     const { search }: { search?: string } = req.query
     const { id } = res.locals.payload
-    const result = await prisma.todo.findMany({
+    const result: Todo[] = await prisma.todo.findMany({
       where: {
         author: { id: Number(id) },
         OR: [
@@ -52,7 +52,7 @@ export const Todo = {
   //! Delete a todo by id
   deleteBy: async (req: Request, res: Response) => {
     const { id } = req.params
-    const todo = await prisma.todo.delete({
+    const todo: Todo = await prisma.todo.delete({
       where: { id: Number(id) },
     })
 

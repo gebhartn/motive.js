@@ -1,12 +1,12 @@
 import { Router } from 'express'
-import { Todo } from '../controllers/todo'
+import { TodoController } from '../controllers/todo'
 import checkJwt from '../utils/middlewares'
 
 const router = Router()
 
-router.get('/', [checkJwt], Todo.findAll)
-router.post('/', [checkJwt], Todo.create)
-router.delete('/:id', [checkJwt], Todo.deleteBy)
-router.get('/filter', [checkJwt], Todo.filterBy)
+router.get('/', [checkJwt], TodoController.findAll)
+router.post('/', [checkJwt], TodoController.create)
+router.delete('/:id', [checkJwt], TodoController.deleteBy)
+router.get('/filter', [checkJwt], TodoController.filterBy)
 
 export default router

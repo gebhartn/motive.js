@@ -1,32 +1,41 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, User } from '@prisma/client'
 import { Request, Response } from 'express'
 import * as bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
-export const User = {
+export const UserController = {
+  //! Register a new user
+  //!  Body:
+  //!    username: String (reqired): unique username
+  //!    password: String (reqired): password
   register: async (req: Request, res: Response) => {
     const { username, password } = req.body
     const hashed = bcrypt.hashSync(password, 8)
 
-    const { id, username: user, createdAt } = await prisma.user.create({
+    const { id } = await prisma.user.create({
       data: {
         username,
         password: hashed,
       },
     })
 
-    res.status(201).json({ id, user, createdAt })
+    res.status(201).json({ id })
   },
 
+  //! Update password for existing user
+  //!  Body:
+  //!    oldPassword: String (required): previous password
+  //!    newPassword: String (required): cannot be the same password
   updatePassword: async (req: Request, res: Response) => {
     const { id } = res.locals.payload
     const { oldPassword, newPassword } = req.body
+
     if (!(oldPassword && newPassword)) {
       res.status(400).send()
     }
 
-    let user
+    let user: User
 
     try {
       user = await prisma.user.findOne({ where: { id: Number(id) } })
