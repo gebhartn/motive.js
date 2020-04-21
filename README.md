@@ -72,6 +72,19 @@
  - todos: Todo
 ```
 
+### [Protected Route] PUT /todo/:id
+```js
+ Headers:
+ - authorization: String (required): valid token
+
+ Body:
+ - category: String (required): Ex. work, personal
+ - content: String (required): Ex. take out trash
+
+ Return:
+ - status: 204
+```
+
 ### [Protected Route] DELETE /todo
 ```js
  Headers:
