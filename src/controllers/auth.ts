@@ -16,22 +16,22 @@ export const AuthController = {
     const { username, password } = req.body
 
     if (!(username && password)) {
-      res.status(400).json({ err: 'Must provide username and password' })
+      return res.status(400).json({ err: 'Must provide username and password' })
     }
 
-    let user: User
+    let user: User | null = null
 
     try {
       user = await prisma.user.findOne({ where: { username } })
     } catch (err) {
-      res.status(401).json({ err: 'That user does not exist' })
+      return res.status(401).json({ err: 'That user does not exist' })
     }
 
     if (!(user && bcrypt.compareSync(password, user.password))) {
-      res.status(401).json({ err: 'Invalid password' })
+      return res.status(401).json({ err: 'Invalid password' })
     }
 
-    const token = signJwt(user.id)
+    const token = user && signJwt(user.id)
 
     res.status(200).json({ payload: token })
   },

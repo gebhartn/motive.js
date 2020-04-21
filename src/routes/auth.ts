@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { UserController } from '../controllers/user'
 import { AuthController } from '../controllers/auth'
-import checkJwt from '../utils/middlewares'
+import { checkJwt } from '../utils/middlewares'
 
 const router = Router()
 

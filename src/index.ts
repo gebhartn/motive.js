@@ -1,14 +1,13 @@
-import * as express from 'express'
-import * as cors from 'cors'
-import * as helmet from 'helmet'
+import express from 'express'
 import routes from './routes'
+import { applyMiddleware } from './utils/middlewares'
+
+const port: number | string = process.env.PORT || 8000
 
 const app = express()
 
-app.use(helmet())
-app.use(cors())
-app.use(express.json())
+applyMiddleware(app)
 
 app.use('/', routes)
 
-app.listen(3000, () => console.log(`Server has started on port 3000`))
+app.listen(port, () => console.log(`Server has started on port ${port}`))
