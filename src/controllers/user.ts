@@ -43,7 +43,11 @@ export const UserController = {
       res.status(401).send()
     }
 
-    if (user && bcrypt.compareSync(oldPassword, user.password)) {
+    if (!bcrypt.compareSync(oldPassword, user.password)) {
+      res.status(401).json({ err: 'Password was incorrect' })
+    }
+
+    if (bcrypt.compareSync(newPassword, user.password)) {
       res.status(401).json({ err: 'Password must be different' })
     }
 
