@@ -10,25 +10,28 @@ export const AuthController = {
   //!  Body:
   //!    username: String (reqired): unique username
   //!    password: String (reqired): password
+
   login: async (req: Request, res: Response) => {
     const { username, password } = req.body
-    let user: User
 
     if (!(username && password)) {
-      res.status(400).send()
+      res.status(400).send({ err: 'Must provide username and password' })
     }
+
+    let user: User
 
     try {
       user = await prisma.user.findOne({ where: { username } })
     } catch (err) {
-      res.status(401).send()
+      res.status(401).send({ err: 'That user does not exist' })
     }
 
-    if (user && bcrypt.compareSync(password, user.password)) {
-      const token = signJwt(user.id)
-      res.status(200).json({ payload: token })
-    } else {
-      res.status(401).send()
+    if (!(user && bcrypt.compareSync(password, user.password))) {
+      res.status(401).send({ err: 'Invalid password' })
     }
+
+    const token = signJwt(user.id)
+
+    res.status(200).json({ payload: token })
   },
 }
