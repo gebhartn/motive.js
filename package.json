@@ -3,7 +3,10 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
-    "start:dev": "ts-node-dev -r dotenv/config --respawn src/index.ts"
+    "build-ts": "tsc",
+    "postinstall": "npm run build-ts",
+    "start": "npm run serve",
+    "serve": "node dist/index.js"
   },
   "dependencies": {
     "@prisma/client": "^2.0.0-beta.2",
