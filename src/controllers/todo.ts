@@ -118,7 +118,7 @@ export const TodoController = {
       return res.status(401).json({ err: 'No todo with that ID' })
     }
 
-    res.status(202).json({ todo })
+    res.status(200).json({ todo })
   },
 
   updateOne: async (req: Request, res: Response) => {
