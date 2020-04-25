@@ -4,10 +4,22 @@ import helmet from 'helmet'
 import * as jwt from 'jsonwebtoken'
 import config from './config'
 
-export const applyMiddleware = (server: Application) => {
-  server.use(cors())
-  server.use(helmet())
-  server.use(express.json())
+type JsonError = (
+  err: any,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => void
+
+export const handleJsonError: JsonError = (err, _req, res, next) => {
+  if (
+    err instanceof SyntaxError &&
+    (err as any).status === 400 &&
+    'body' in err
+  ) {
+    return res.status(400).json({ err: (err as any).message })
+  }
+  next()
 }
 
 export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
@@ -29,4 +41,11 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   res.setHeader('token', newToken)
 
   next()
+}
+
+export const applyMiddleware = (server: Application) => {
+  server.use(cors())
+  server.use(helmet())
+  server.use(express.json())
+  server.use(handleJsonError)
 }
