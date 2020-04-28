@@ -8,7 +8,7 @@ import config from './config'
 //! todo: implement error handling
 
 type JsonError = (
-  err: any,
+  err: any | Error,
   req: Request,
   res: Response,
   next: NextFunction
